@@ -1,0 +1,609 @@
+<!DOCTYPE html>
+<html lang="ml">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>മലയാള സാഹിത്യവും സാമാന്യവിജ്ഞാനവും - ക്വിസ്</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Canvas Confetti Library -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <!-- Tone.js for sound effects -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.8.49/Tone.js"></script>
+    <!-- Google Fonts: Manjari & Chilanka for Malayalam typography -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Chilanka&family=Manjari:wght@400;700&display=swap" rel="stylesheet">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        kerala: {
+                            gold: '#D4AF37',
+                            darkGold: '#AA820A',
+                            green: '#0F5257',
+                            darkGreen: '#0B3C40',
+                            maroon: '#6B1D2F',
+                            cream: '#FFFDD0',
+                            paper: '#FDFBF7'
+                        }
+                    },
+                    fontFamily: {
+                        ml: ['Manjari', 'sans-serif'],
+                        heading: ['Chilanka', 'cursive', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            font-family: 'Manjari', sans-serif;
+            background-color: #0F5257;
+            background-image: radial-gradient(#1B6B70 1px, transparent 1px);
+            background-size: 24px 24px;
+            min-height: 100vh;
+        }
+
+        .heading-font {
+            font-family: 'Chilanka', cursive, sans-serif;
+        }
+
+        .kasavu-border {
+            border: 4px solid #D4AF37;
+            box-shadow: 0 0 15px rgba(212, 175, 55, 0.3);
+        }
+
+        .option-btn {
+            transition: all 0.2s ease-in-out;
+        }
+
+        .option-btn:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        @keyframes pulseGlow {
+            0%, 100% { box-shadow: 0 0 15px rgba(212, 175, 55, 0.4); }
+            50% { box-shadow: 0 0 25px rgba(212, 175, 55, 0.8); }
+        }
+
+        .glow-card {
+            animation: pulseGlow 3s infinite ease-in-out;
+        }
+
+        .shake {
+            animation: shake 0.4s cubic-bezier(.36,.07,.19,.97) both;
+        }
+
+        @keyframes shake {
+            10%, 90% { transform: translate3d(-1px, 0, 0); }
+            20%, 80% { transform: translate3d(2px, 0, 0); }
+            30%, 50%, 70% { transform: translate3d(-4px, 0, 0); }
+            40%, 60% { transform: translate3d(4px, 0, 0); }
+        }
+    </style>
+</head>
+<body class="text-gray-800 flex flex-col justify-between p-3 md:p-6 min-h-screen">
+
+    <header class="max-w-4xl w-full mx-auto mb-4 flex justify-between items-center bg-kerala-darkGreen/80 backdrop-blur border-b-2 border-kerala-gold p-4 rounded-xl text-kerala-cream shadow-lg">
+        <div class="flex items-center space-x-3 space-x-reverse">
+            <span class="text-3xl text-kerala-gold"><i class="fa-solid fa-scroll"></i></span>
+            <div>
+                <h1 class="text-xl md:text-2xl font-bold heading-font text-kerala-gold">അക്ഷരമുദ്ര ക്വിസ്</h1>
+                <p class="text-xs text-gray-300">ബി.എ. മലയാളം സാഹിത്യം & സാമാന്യവിജ്ഞാനം</p>
+            </div>
+        </div>
+        <button id="soundToggleBtn" onclick="toggleSound()" class="p-2 px-3 rounded-lg bg-kerala-green border border-kerala-gold text-kerala-gold hover:bg-kerala-gold hover:text-kerala-darkGreen transition">
+            <i class="fa-solid fa-volume-high" id="soundIcon"></i>
+        </button>
+    </header>
+
+    <main class="max-w-3xl w-full mx-auto my-auto">
+        <div id="startScreen" class="bg-kerala-paper rounded-2xl p-6 md:p-10 kasavu-border shadow-2xl text-center space-y-6">
+            <div class="w-20 h-20 mx-auto rounded-full bg-kerala-cream flex items-center justify-center border-2 border-kerala-gold shadow-inner">
+                <i class="fa-solid fa-book-open text-4xl text-kerala-maroon"></i>
+            </div>
+            
+            <h2 class="text-2xl md:text-3xl font-bold text-kerala-maroon heading-font">
+                രഹസ്യ കോഡ് അൺലോക്ക് ചെയ്യുക!
+            </h2>
+
+            <p class="text-gray-700 leading-relaxed text-base md:text-lg">
+                രഹസ്യ പാസ്‌കോഡ് തുറക്കാൻ <strong>12 ചോദ്യങ്ങൾക്കും</strong> ശരിയുത്തരം നൽകേണ്ടതുണ്ട്! ഏതെങ്കിലും ഒരു ചോദ്യം തെറ്റിയാൽ പുതിയ ചോദ്യങ്ങളുമായി വീണ്ടും ക്വിസ് എഴുതേണ്ടി വരും.
+            </p>
+
+            <div class="bg-kerala-cream p-4 rounded-xl text-left border border-kerala-gold/50 text-sm md:text-base text-gray-800 space-y-2">
+                <p class="font-bold text-kerala-darkGreen flex items-center gap-2">
+                    <i class="fa-solid fa-circle-info text-kerala-gold"></i> നിബന്ധനകൾ:
+                </p>
+                <ul class="list-disc list-inside space-y-1 pl-2 text-gray-700">
+                    <li>ആകെ 12 ചോദ്യങ്ങൾ തിരഞ്ഞെടുക്കപ്പെടും.</li>
+                    <li><strong>12 ചോദ്യങ്ങൾക്കും ശരിയായ ഉത്തരം നൽകണം (100% വിജയം).</strong></li>
+                    <li>പരാജയപ്പെട്ടാൽ പുതിയ ചോദ്യങ്ങളുമായി വീണ്ടും ശ്രമിക്കാം.</li>
+                </ul>
+            </div>
+
+            <button onclick="startQuiz()" class="w-full md:w-auto px-8 py-4 bg-kerala-maroon hover:bg-red-900 text-kerala-cream font-bold text-lg rounded-xl shadow-lg hover:shadow-xl transition transform hover:-translate-y-1 border border-kerala-gold flex items-center justify-center gap-3 mx-auto">
+                <span>ക്വിസ് ആരംഭിക്കാം</span>
+                <i class="fa-solid fa-circle-arrow-right text-kerala-gold"></i>
+            </button>
+        </div>
+
+        <div id="quizScreen" class="hidden bg-kerala-paper rounded-2xl p-5 md:p-8 kasavu-border shadow-2xl space-y-6">
+            <!-- Progress Section -->
+            <div class="space-y-2">
+                <div class="flex justify-between items-center text-xs md:text-sm font-bold text-kerala-darkGreen">
+                    <span id="questionCounter">ചോദ്യം 1 / 12</span>
+                    <span id="scoreTracker" class="text-kerala-maroon">സ്കോർ: 0</span>
+                </div>
+                <!-- Progress Bar Container -->
+                <div class="w-full bg-gray-200 h-3 rounded-full overflow-hidden p-0.5 border border-kerala-gold/40">
+                    <div id="progressBar" class="bg-gradient-to-r from-kerala-gold to-kerala-maroon h-full rounded-full transition-all duration-300 w-0"></div>
+                </div>
+            </div>
+
+            <!-- Question Card -->
+            <div id="questionContainer" class="bg-white p-5 md:p-6 rounded-xl border border-gray-200 shadow-sm space-y-4">
+                <h3 id="questionText" class="text-lg md:text-xl font-bold text-gray-800 leading-snug">
+                    <!-- Question text injected here -->
+                </h3>
+            </div>
+
+            <!-- Options Grid -->
+            <div id="optionsContainer" class="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-4">
+                <!-- Option buttons injected here -->
+            </div>
+
+            <!-- Feedback Alert Banner -->
+            <div id="feedbackBanner" class="hidden p-4 rounded-xl border font-bold text-center flex items-center justify-center gap-3 transition">
+                <i id="feedbackIcon" class="text-xl"></i>
+                <span id="feedbackText"></span>
+            </div>
+
+            <!-- Next Question Control -->
+            <div class="flex justify-end pt-2">
+                <button id="nextBtn" onclick="nextQuestion()" disabled class="px-6 py-3 bg-gray-400 text-white font-bold rounded-xl shadow transition flex items-center gap-2 cursor-not-allowed">
+                    <span>അടുത്ത ചോദ്യം</span>
+                    <i class="fa-solid fa-arrow-right"></i>
+                </button>
+            </div>
+        </div>
+
+        <div id="successScreen" class="hidden bg-kerala-paper rounded-2xl p-6 md:p-10 kasavu-border shadow-2xl text-center space-y-6 glow-card">
+            <div class="w-20 h-20 mx-auto rounded-full bg-green-100 flex items-center justify-center border-2 border-green-500 shadow-inner">
+                <i class="fa-solid fa-trophy text-4xl text-kerala-gold"></i>
+            </div>
+
+            <h2 class="text-2xl md:text-3xl font-bold text-kerala-darkGreen heading-font">
+                അഭിനന്ദനങ്ങൾ! നിങ്ങൾ വിജയിച്ചിരിക്കുന്നു!
+            </h2>
+
+            <p class="text-gray-700 text-base md:text-lg">
+                എല്ലാ (12/12) ചോദ്യങ്ങൾക്കും ശരിയായ ഉത്തരം നൽകി നിങ്ങൾ വിജയിച്ചു! താങ്കൾക്കുള്ള രഹസ്യ പാസ്‌കോഡ് താഴെ നൽകുന്നു:
+            </p>
+
+            <!-- Passcode Box -->
+            <div class="bg-kerala-cream border-2 border-dashed border-kerala-gold p-6 rounded-2xl shadow-inner space-y-3">
+                <span class="text-xs uppercase tracking-widest text-kerala-maroon font-bold">നിങ്ങളുടെ രഹസ്യ പാസ്‌കോഡ് (Secret Passcode)</span>
+                <div class="flex items-center justify-center gap-3">
+                    <span id="passcodeDisplay" class="text-4xl md:text-5xl font-extrabold tracking-wider text-kerala-darkGreen font-mono select-all">
+                        0605
+                    </span>
+                    <button onclick="copyPasscode()" class="bg-kerala-gold hover:bg-kerala-darkGold text-kerala-darkGreen p-3 rounded-lg shadow font-bold text-sm transition flex items-center gap-1">
+                        <i class="fa-solid fa-copy"></i>
+                        <span class="hidden md:inline">കോപ്പി ചെയ്യുക</span>
+                    </button>
+                </div>
+                <p id="copyAlert" class="text-xs text-green-700 font-bold hidden">
+                    <i class="fa-solid fa-check-circle"></i> പാസ്‌കോഡ് കോപ്പി ചെയ്തു!
+                </p>
+            </div>
+
+            <div class="flex flex-col md:flex-row gap-3 justify-center pt-2">
+                <button onclick="restartQuiz()" class="px-6 py-3 bg-kerala-green hover:bg-kerala-darkGreen text-white font-bold rounded-xl shadow transition flex items-center justify-center gap-2">
+                    <i class="fa-solid fa-rotate-right"></i>
+                    <span>വീണ്ടും ആരംഭിക്കുക</span>
+                </button>
+            </div>
+        </div>
+
+        <div id="failScreen" class="hidden bg-kerala-paper rounded-2xl p-6 md:p-10 kasavu-border shadow-2xl text-center space-y-6">
+            <div class="w-20 h-20 mx-auto rounded-full bg-red-100 flex items-center justify-center border-2 border-red-500 shadow-inner">
+                <i class="fa-solid fa-triangle-exclamation text-4xl text-kerala-maroon"></i>
+            </div>
+
+            <h2 class="text-2xl md:text-3xl font-bold text-kerala-maroon heading-font">
+                ക്ഷമിക്കണം! പാസ്‌കോഡ് തുറക്കാനായില്ല
+            </h2>
+
+            <p class="text-gray-700 text-base md:text-lg">
+                പാസ്‌കോഡ് ലഭിക്കുന്നതിന് 12 ചോദ്യങ്ങൾക്കും ശരിയായ ഉത്തരം നൽകേണ്ടതുണ്ട്. താങ്കൾക്ക് <span id="finalFailScore" class="font-bold text-kerala-maroon"></span> സ്കോർ മാത്രമേ നേടാനായുള്ളൂ.
+            </p>
+
+            <div class="bg-amber-50 p-4 rounded-xl border border-amber-300 text-amber-900 text-sm">
+                <p class="font-bold mb-1"><i class="fa-solid fa-lightbulb text-amber-600"></i> പുതിയ അവസരം!</p>
+                <p>താഴെയുള്ള ബട്ടണിൽ ക്ലിക്ക് ചെയ്ത് പുതിയ ചോദ്യങ്ങളുമായി വീണ്ടും ക്വിസ് എഴുതാം.</p>
+            </div>
+
+            <div class="flex justify-center pt-2">
+                <button onclick="startQuiz()" class="px-8 py-4 bg-kerala-maroon hover:bg-red-900 text-kerala-cream font-bold text-lg rounded-xl shadow-lg transition flex items-center justify-center gap-2 border border-kerala-gold">
+                    <i class="fa-solid fa-arrows-rotate"></i>
+                    <span>പുതിയ ചോദ്യങ്ങളുമായി വീണ്ടും എഴുതുക</span>
+                </button>
+            </div>
+        </div>
+    </main>
+
+    <footer class="max-w-4xl w-full mx-auto mt-6 text-center text-xs text-kerala-cream/80 py-2">
+        <p>© ബി.എ. മലയാളം സാഹിത്യ വിഭാഗം | അക്ഷരമുദ്ര ക്വിസ്</p>
+    </footer>
+
+    <script>
+        // Large Question Bank (28 Questions for BA Malayalam Level)
+        const masterQuestionBank = [
+            {
+                question: "1. 'മലയാള ഭാഷാ പിതാവ്' എന്നറിയപ്പെടുന്ന സാഹിത്യകാരൻ ആര്?",
+                options: ["ചെറുശ്ശേരി", "തുഞ്ചത്ത് എഴുത്തച്ഛൻ", "കുഞ്ചൻ നമ്പ്യാർ", "ഉള്ളൂർ എസ്. പരമേശ്വരയ്യർ"],
+                correct: 1
+            },
+            {
+                question: "2. മലയാളത്തിലെ ആദ്യത്തെ ലക്ഷണമൊത്ത നോവൽ ഏതാണ്?",
+                options: ["കുന്ദലത", "ഇന്ദുലേഖ", "മാർത്താണ്ഡവർമ്മ", "ശാരദ"],
+                correct: 1
+            },
+            {
+                question: "3. 'തുള്ളൽ പ്രസ്ഥാനത്തിന്റെ' സ്ഥാപകൻ ആരാണ്?",
+                options: ["ഉണ്ണായി വാര്യർ", "കുഞ്ചൻ നമ്പ്യാർ", "കോട്ടയത്തു തമ്പുരാൻ", "ഇരയിമ്മൻ തമ്പി"],
+                correct: 1
+            },
+            {
+                question: "4. ജ്ഞാനപീഠ പുരസ്കാരം നേടിയ ആദ്യ മലയാളി സാഹിത്യകാരൻ ആര്?",
+                options: ["തകഴി ശിവശങ്കരപ്പിള്ള", "ജി. ശങ്കരക്കുറുപ്പ്", "എസ്. കെ. പൊറ്റെക്കാട്ട്", "എം. ടി. വാസുദേവൻ നായർ"],
+                correct: 1
+            },
+            {
+                question: "5. 'ആധുനിക കവിത്രയങ്ങളിൽ' ഉൾപ്പെടാത്ത കവി ആര്?",
+                options: ["കുമാരനാശാൻ", "വള്ളത്തോൾ നാരായണമേനോൻ", "ഉള്ളൂർ എസ്. പരമേശ്വരയ്യർ", "ചെറുശ്ശേരി നമ്പൂതിരി"],
+                correct: 3
+            },
+            {
+                question: "6. വഞ്ചിപ്പാട്ട് പ്രസ്ഥാനത്തിലെ പ്രശസ്തമായ 'കുചേലവൃത്തം വഞ്ചിപ്പാട്ട്' രചിച്ചത് ആര്?",
+                options: ["രാമപുരത്തു വാര്യർ", "ചെറുശ്ശേരി", "എഴുത്തച്ഛൻ", "വള്ളത്തോൾ"],
+                correct: 0
+            },
+            {
+                question: "7. കേരളത്തിന്റെ ഔദ്യോഗിക സംസ്ഥാന വൃക്ഷം ഏതാണ്?",
+                options: ["ആൽമരം", "തെങ്ങ്", "പ്ലാവ്", "മാവ്"],
+                correct: 1
+            },
+            {
+                question: "8. 'വീണപൂവ്' എന്ന വിഖ്യാത ഖണ്ഡകാവ്യം രചിച്ചത് ആര്?",
+                options: ["വള്ളത്തോൾ", "ഉള്ളൂർ", "കുമാരനാശാൻ", "ഇടശ്ശേരി"],
+                correct: 2
+            },
+            {
+                question: "9. മലയാളത്തിലെ ആദ്യത്തെ വാരികയായി കരുതപ്പെടുന്ന പ്രസിദ്ധീകരണം ഏത്?",
+                options: ["രാജ്യസമാചാരം", "പശ്ചിമോദയം", "മലയാള മനോരമ", "കേരളപത്രിക"],
+                correct: 0
+            },
+            {
+                question: "10. 'ചെമ്മീൻ' എന്ന പ്രശസ്ത നോവലിന്റെ കർത്താവ് ആര്?",
+                options: ["വൈക്കം മുഹമ്മദ് ബഷീർ", "തകഴി ശിവശങ്കരപ്പിള്ള", "ഉറൂബ്", "കേശവദേവ്"],
+                correct: 1
+            },
+            {
+                question: "11. 'സുഭദ്രാഹരണം' മണിപ്രവാള കാവ്യത്തിന്റെ കർത്താവ് ആര്?",
+                options: ["നീലകണ്ഠ കവി", "ചീരാമൻ", "ഇരയിമ്മൻ തമ്പി", "കോവിലൻ"],
+                correct: 0
+            },
+            {
+                question: "12. കേരളത്തിലെ ഏറ്റവും വലിയ നദി ഏതാണ്?",
+                options: ["ഭാരതപ്പുഴ", "പമ്പാ നദി", "പെരിയാർ", "ചാലക്കുടിപ്പുഴ"],
+                correct: 2
+            },
+            {
+                question: "13. 'ബാല്യകാലസഖി' എന്ന പ്രശസ്തമായ നോവൽ എഴുതിയതാര്?",
+                options: ["വൈക്കം മുഹമ്മദ് ബഷീർ", "എം.ടി. വാസുദേവൻ നായർ", "പൊൻകുന്നം വർക്കി", "എസ്. കെ. പൊറ്റെക്കാട്ട്"],
+                correct: 0
+            },
+            {
+                question: "14. 'കേരള പാണിനി' എന്നറിയപ്പെടുന്നത് ആര്?",
+                options: ["എ.ആർ. രാജരാജവർമ്മ", "കേരളവർമ്മ വലിയകോയിത്തമ്പുരാൻ", "വള്ളത്തോൾ", "ഗുണ്ടർട്ട്"],
+                correct: 0
+            },
+            {
+                question: "15. മലയാളത്തിലെ ആദ്യത്തെ മഹാകാവ്യം ഏതാണ്?",
+                options: ["രാമചന്ദ്രചരിതം", "ഉമാകേരളം", "രാമചരിതം", "കൃഷ്ണഗാഥ"],
+                correct: 1
+            },
+            {
+                question: "16. 'കൃഷ്ണഗാഥ' രചിച്ചത് ആര്?",
+                options: ["ചെറുശ്ശേരി", "തുഞ്ചത്ത് എഴുത്തച്ഛൻ", "പൂന്താനം", "കണ്ണശ്ശപ്പണിക്കർ"],
+                correct: 0
+            },
+            {
+                question: "17. 'ജ്ഞാനപ്പാന' രചിച്ച ഭക്തികവി ആര്?",
+                options: ["പൂന്താനം നമ്പൂതിരി", "എഴുത്തച്ഛൻ", "മേൽപ്പത്തൂർ", "ചെറുശ്ശേരി"],
+                correct: 0
+            },
+            {
+                question: "18. 'നളചരിതം ആട്ടക്കഥ' രചിച്ച പ്രശസ്ത കവി ആര്?",
+                options: ["ഉണ്ണായി വാര്യർ", "കോട്ടയത്തു തമ്പുരാൻ", "വള്ളത്തോൾ", "ഇരയിമ്മൻ തമ്പി"],
+                correct: 0
+            },
+            {
+                question: "19. 'ഖസാക്കിന്റെ ഇതിഹാസം' എന്ന പ്രശസ്ത നോവൽ ആരുടേതാണ്?",
+                options: ["ഒ.വി. വിജയൻ", "എം. മുകുന്ദൻ", "സി.വി. ശ്രീരാമൻ", "സക്കറിയ"],
+                correct: 0
+            },
+            {
+                question: "20. 'മയ്യഴപ്പുഴയുടെ തീരങ്ങളിൽ' എന്ന നോവൽ രചിച്ചതാര്?",
+                options: ["എം. മുകുന്ദൻ", "ഒ.വി. വിജയൻ", "സേതു", "പുനത്തിൽ കുഞ്ഞബ്ദുള്ള"],
+                correct: 0
+            },
+            {
+                question: "21. ആദ്യത്തെ മലയാള വ്യാകരണ ഗ്രന്ഥം തയ്യാറാക്കിയത് ആര്?",
+                options: ["ഹെർമൻ ഗുണ്ടർട്ട്", "ആഞ്ചലോസ് ഫ്രാൻസിസ്", "അർണ്ണോസ് പാതിരി", "കാൾഡ്‌വെൽ"],
+                correct: 0
+            },
+            {
+                question: "22. വള്ളത്തോൾ നാരായണമേനോൻ സ്ഥാപിച്ച പ്രശസ്ത കലാകേന്ദ്രമേത്?",
+                options: ["കേരള കലാമണ്ഡലം", "മാർത്താണ്ഡവർമ്മ അക്കാദമി", "കേരള സാഹിത്യ അക്കാദമി", "ലളിതകലാ അക്കാദമി"],
+                correct: 0
+            },
+            {
+                question: "23. 'കർണ്ണഭൂഷണം' എന്ന പ്രശസ്ത കവിത ആരുടേതാണ്?",
+                options: ["ഉള്ളൂർ എസ്. പരമേശ്വരയ്യർ", "കുമാരനാശാൻ", "വള്ളത്തോൾ", "ജി. ശങ്കരക്കുറുപ്പ്"],
+                correct: 0
+            },
+            {
+                question: "24. മലയാളത്തിലെ ആദ്യത്തെ അച്ചടിച്ച പുസ്തകം ഏത്?",
+                options: ["സംക്ഷേപവേദാർത്ഥം", "രാജ്യസമാചാരം", "ജ്ഞാനപീഠം", "ചെറുപൈതങ്ങൾക്ക് ഉപകാരമുള്ള കഥകൾ"],
+                correct: 0
+            },
+            {
+                question: "25. 'കേരള സിംഹം' എന്നറിയപ്പെടുന്ന സ്വാതന്ത്ര്യസമര സേനാനി ആര്?",
+                options: ["പഴശ്ശിരാജാ", "വേലുത്തമ്പി ദളവ", "കെ. കേളപ്പൻ", "മമ്പുറം തങ്ങൾ"],
+                correct: 0
+            },
+            {
+                question: "26. 'രണ്ടാംമൂഴം' എന്ന വിഖ്യാത നോവലിന്റെ കർത്താവ് ആര്?",
+                options: ["എം.ടി. വാസുദേവൻ നായർ", "പി. വത്സല", "ടി. പദ്മനാഭൻ", "സി. രാധാകൃഷ്ണൻ"],
+                correct: 0
+            },
+            {
+                question: "27. 'അഗ്നിസാക്ഷി' എന്ന നോവൽ രചിച്ച സാഹിത്യകാരി ആര്?",
+                options: ["ലളിതാംബിക അന്തർജ്ജനം", "മാധവിക്കുട്ടി", "കെ.ആർ. മീര", "സുഗതകുമാരി"],
+                correct: 0
+            },
+            {
+                question: "28. 'ഒരു ദേശത്തിന്റെ കഥ' രചിച്ചതിന് ജ്ഞാനപീഠം ലഭിച്ചത ആർക്ക്?",
+                options: ["എസ്. കെ. പൊറ്റെക്കാട്ട്", "തകഴി", "എം.ടി. വാസുദേവൻ നായർ", "അക്കിത്തം"],
+                correct: 0
+            }
+        ];
+
+        // Passcode
+        const SECRET_PASSCODE = "0605";
+
+        // Quiz State Variables
+        let activeQuestions = [];
+        let currentQuestionIndex = 0;
+        let score = 0;
+        let hasAnsweredCurrent = false;
+        let soundEnabled = true;
+
+        // Sound Setup
+        let synth;
+        function initSound() {
+            if (!synth) {
+                synth = new Tone.Synth().toDestination();
+            }
+        }
+
+        function playCorrectSound() {
+            if (!soundEnabled) return;
+            try {
+                initSound();
+                synth.triggerAttackRelease("C5", "8n", Tone.now());
+                setTimeout(() => synth.triggerAttackRelease("E5", "8n", Tone.now()), 100);
+            } catch(e){}
+        }
+
+        function playWrongSound() {
+            if (!soundEnabled) return;
+            try {
+                initSound();
+                synth.triggerAttackRelease("G2", "8n", Tone.now());
+            } catch(e){}
+        }
+
+        function toggleSound() {
+            soundEnabled = !soundEnabled;
+            const icon = document.getElementById("soundIcon");
+            if (soundEnabled) {
+                icon.className = "fa-solid fa-volume-high";
+            } else {
+                icon.className = "fa-solid fa-volume-xmark";
+            }
+        }
+
+        // Helper function to pick 12 random questions from question bank
+        function getRandom12Questions() {
+            const shuffled = [...masterQuestionBank].sort(() => 0.5 - Math.random());
+            return shuffled.slice(0, 12);
+        }
+
+        function startQuiz() {
+            document.getElementById("startScreen").classList.add("hidden");
+            document.getElementById("successScreen").classList.add("hidden");
+            document.getElementById("failScreen").classList.add("hidden");
+            document.getElementById("quizScreen").classList.remove("hidden");
+
+            // Pick 12 fresh randomized questions
+            activeQuestions = getRandom12Questions();
+            currentQuestionIndex = 0;
+            score = 0;
+            document.getElementById("passcodeDisplay").innerText = SECRET_PASSCODE;
+            loadQuestion();
+        }
+
+        function loadQuestion() {
+            hasAnsweredCurrent = false;
+            const currentQ = activeQuestions[currentQuestionIndex];
+
+            // Update Progress Bar & Counter
+            const progressPercent = ((currentQuestionIndex + 1) / activeQuestions.length) * 100;
+            document.getElementById("progressBar").style.width = `${progressPercent}%`;
+            document.getElementById("questionCounter").innerText = `ചോദ്യം ${currentQuestionIndex + 1} / ${activeQuestions.length}`;
+            document.getElementById("scoreTracker").innerText = `സ്കോർ: ${score}`;
+
+            // Reset Feedback & Next Button
+            const feedbackBanner = document.getElementById("feedbackBanner");
+            feedbackBanner.className = "hidden p-4 rounded-xl border font-bold text-center flex items-center justify-center gap-3";
+            
+            const nextBtn = document.getElementById("nextBtn");
+            nextBtn.disabled = true;
+            nextBtn.className = "px-6 py-3 bg-gray-300 text-gray-500 font-bold rounded-xl shadow cursor-not-allowed flex items-center gap-2";
+
+            // Set Question Text with current index
+            document.getElementById("questionText").innerText = `${currentQuestionIndex + 1}. ${currentQ.question.replace(/^\d+\.\s*/, '')}`;
+
+            // Render Options
+            const optionsContainer = document.getElementById("optionsContainer");
+            optionsContainer.innerHTML = "";
+
+            currentQ.options.forEach((option, index) => {
+                const button = document.createElement("button");
+                button.className = "option-btn w-full p-4 text-left font-medium bg-white border-2 border-gray-200 hover:border-kerala-gold text-gray-800 rounded-xl shadow-sm flex items-center justify-between";
+                button.onclick = () => selectOption(index);
+                button.innerHTML = `
+                    <span class="flex items-center gap-3">
+                        <span class="w-7 h-7 rounded-full bg-kerala-cream text-kerala-darkGreen font-bold flex items-center justify-center border border-kerala-gold text-sm">${index + 1}</span>
+                        <span>${option}</span>
+                    </span>
+                    <i class="fa-regular fa-circle text-gray-300 status-icon"></i>
+                `;
+                optionsContainer.appendChild(button);
+            });
+        }
+
+        function selectOption(selectedIndex) {
+            if (hasAnsweredCurrent) return;
+            hasAnsweredCurrent = true;
+
+            const currentQ = activeQuestions[currentQuestionIndex];
+            const optionButtons = document.getElementById("optionsContainer").children;
+            const feedbackBanner = document.getElementById("feedbackBanner");
+            const feedbackIcon = document.getElementById("feedbackIcon");
+            const feedbackText = document.getElementById("feedbackText");
+
+            if (selectedIndex === currentQ.correct) {
+                // Correct Answer
+                score++;
+                playCorrectSound();
+                optionButtons[selectedIndex].className = "option-btn w-full p-4 text-left font-medium bg-green-50 border-2 border-green-600 text-green-900 rounded-xl shadow-md flex items-center justify-between";
+                optionButtons[selectedIndex].querySelector(".status-icon").className = "fa-solid fa-circle-check text-green-600 text-xl";
+
+                feedbackBanner.className = "p-4 rounded-xl border border-green-300 bg-green-50 text-green-800 font-bold text-center flex items-center justify-center gap-3";
+                feedbackIcon.className = "fa-solid fa-circle-check text-green-600 text-2xl";
+                feedbackText.innerText = "ശരിയായ ഉത്തരം! അഭിനന്ദനങ്ങൾ.";
+            } else {
+                // Incorrect Answer
+                playWrongSound();
+                document.getElementById("quizScreen").classList.add("shake");
+                setTimeout(() => document.getElementById("quizScreen").classList.remove("shake"), 400);
+
+                // Highlight Selected Wrong
+                optionButtons[selectedIndex].className = "option-btn w-full p-4 text-left font-medium bg-red-50 border-2 border-red-500 text-red-900 rounded-xl shadow-md flex items-center justify-between";
+                optionButtons[selectedIndex].querySelector(".status-icon").className = "fa-solid fa-circle-xmark text-red-500 text-xl";
+
+                // Highlight Correct Option
+                optionButtons[currentQ.correct].className = "option-btn w-full p-4 text-left font-medium bg-green-50 border-2 border-green-600 text-green-900 rounded-xl shadow-md flex items-center justify-between";
+                optionButtons[currentQ.correct].querySelector(".status-icon").className = "fa-solid fa-circle-check text-green-600 text-xl";
+
+                feedbackBanner.className = "p-4 rounded-xl border border-red-300 bg-red-50 text-red-800 font-bold text-center flex items-center justify-center gap-3";
+                feedbackIcon.className = "fa-solid fa-circle-exclamation text-red-600 text-2xl";
+                feedbackText.innerText = `തെറ്റായ ഉത്തരം. ശരിയായ ഉത്തരം: ${currentQ.options[currentQ.correct]}`;
+            }
+
+            // Disable all option buttons after click
+            Array.from(optionButtons).forEach(btn => btn.disabled = true);
+
+            // Update Score Tracker
+            document.getElementById("scoreTracker").innerText = `സ്കോർ: ${score}`;
+
+            // Enable Next Button
+            const nextBtn = document.getElementById("nextBtn");
+            nextBtn.disabled = false;
+            nextBtn.className = "px-6 py-3 bg-kerala-maroon hover:bg-red-900 text-kerala-cream font-bold rounded-xl shadow transition flex items-center gap-2 cursor-pointer";
+        }
+
+        function nextQuestion() {
+            if (!hasAnsweredCurrent) return;
+
+            currentQuestionIndex++;
+            if (currentQuestionIndex < activeQuestions.length) {
+                loadQuestion();
+            } else {
+                evaluateResult();
+            }
+        }
+
+        function evaluateResult() {
+            document.getElementById("quizScreen").classList.add("hidden");
+
+            // Strict Rule: Must score 12 out of 12
+            if (score === activeQuestions.length) {
+                document.getElementById("successScreen").classList.remove("hidden");
+                if (typeof confetti === 'function') {
+                    confetti({
+                        particleCount: 150,
+                        spread: 90,
+                        origin: { y: 0.6 }
+                    });
+                }
+            } else {
+                document.getElementById("failScreen").classList.remove("hidden");
+                document.getElementById("finalFailScore").innerText = `${score} / ${activeQuestions.length}`;
+            }
+        }
+
+        function copyPasscode() {
+            const passcodeText = document.getElementById("passcodeDisplay").innerText.trim();
+            
+            if (navigator.clipboard && window.isSecureContext) {
+                navigator.clipboard.writeText(passcodeText).then(showCopyAlert);
+            } else {
+                const textArea = document.createElement("textarea");
+                textArea.value = passcodeText;
+                document.body.appendChild(textArea);
+                textArea.select();
+                try {
+                    document.execCommand('copy');
+                    showCopyAlert();
+                } catch (err) {
+                    console.error('Failed to copy text', err);
+                }
+                document.body.removeChild(textArea);
+            }
+        }
+
+        function showCopyAlert() {
+            const alert = document.getElementById("copyAlert");
+            alert.classList.remove("hidden");
+            setTimeout(() => alert.classList.add("hidden"), 3000);
+        }
+
+        function restartQuiz() {
+            startQuiz();
+        }
+    </script>
+</body>
+</html>
